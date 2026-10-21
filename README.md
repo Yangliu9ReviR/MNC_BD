@@ -20,6 +20,7 @@
 | 组织架构 / BD 决策流 | 各公司汇报关系图；MNC 对外合作（License-in / 收购 / 联合开发）的典型决策链 |
 | 投资线 × 孵化平台 | 20 家公司的创投布局（16 家有品牌化基金 · 2 家直投 · 2 家无独立创投线）· 8 个在华孵化 / 开放创新平台 |
 | 交易库 | **372 笔**并购 × 管线合作（2020 年至今）：并购 149 · 合作开发 118 · License-in 79 · 期权 18 · 股权投资 5 · License-out 3，含交易结构、首付/里程碑、靶点、关键临床数据 |
+| **靶点格局**（新） | 把 20 家 MNC 的**上市药 + 自研管线 + BD 交易**按靶点归到一张热力矩阵：633 个靶点、901 个「公司 × 靶点」格子 · 格内为该公司在该靶点的最高阶段，小点标注来源（上市药 / 自研管线 / BD 交易）· 支持按机制类别、最少覆盖公司数、只看有 BD 筛选 · 点靶点展开逐公司明细 · 另有「靶点热度趋势」（靶点 × 年份的 BD 交易数）。公司详情页的药物表与管线表也补上了「靶点」列 |
 
 两个**本机计算**的智能工具（不上传任何数据）：
 
@@ -45,6 +46,7 @@
 | `network.js` | 人物关系网络图模块 |
 | `vendor/d3.min.js` | d3 v7 |
 | `face_index.js` | 人脸特征索引（366 人 → 361 条向量），首次使用识人功能时才加载 |
+| `target_matrix.js` | 靶点格局矩阵（633 个靶点 × 20 家 MNC），由 `research/build_target_matrix.py` 生成 |
 | `models/` | face-api.js 与 3 个人脸模型（含离线模式用的 `face-assets.js`），约 17MB，按需加载 |
 | `photos/` | 366 张本地头像（已压缩，长边 512px） |
 | `logos/` | 20 家公司品牌 Logo |
@@ -82,14 +84,15 @@ python3 -m http.server 8000
 更新流程：
 
 1. 在主项目里修改数据或页面
-2. 若改动了 `index.html` / `data.js` / `network.js`，先跑 `node build_standalone.js` 重建单文件版
+2. 若改动了 `index.html` / `data.js` / `network.js` / `target_matrix.js`，先跑 `node build_standalone.js` 重建单文件版
+   （补了上市药、管线或交易后，先跑 `python3 research/build_target_matrix.py` 重建靶点矩阵）
 3. 若更换了头像，需重建人脸索引（`node research/build_face_index.js`）
 4. 同步到本目录后提交推送：
 
 ```bash
 # 在主项目根目录执行
 cd /path/to/MNC_BD
-rsync -a --exclude='.DS_Store' index.html data.js network.js face_index.js MNC_BD.html \
+rsync -a --exclude='.DS_Store' index.html data.js network.js face_index.js target_matrix.js MNC_BD.html \
       vendor logos photos models github_release/MNC_BD/
 cd github_release/MNC_BD && git add -A && git commit -m "内容更新" && git push
 ```
