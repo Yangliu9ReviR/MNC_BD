@@ -282,6 +282,56 @@ nav.tabs button.navlink{font-weight:500}
 .pchart>div{display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden;white-space:nowrap}
 .plegend{display:flex;gap:12px;flex-wrap:wrap;font-size:11.5px;color:var(--ink2);align-items:center}
 .plegend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+/* 上市药专利族（patents.js） */
+.patbtn{margin-left:6px;padding:1px 7px;font-size:11px;line-height:1.6;border:1px solid var(--line,#dbe3ee);background:#f2f6fc;color:#0e5a86;border-radius:999px;cursor:pointer;font-weight:600;white-space:nowrap}
+.patbtn:hover{background:#e6effa;border-color:#b9cfe8}
+.ptable tr.patdetail:hover td{background:#fff}
+.ptable td.patwrap-cell{padding:0}
+.patwrap{padding:10px 12px 12px;background:#fbfdff;border-left:3px solid #7cb8e0}
+.pathead{font-size:11.5px;color:var(--ink2);margin-bottom:8px;line-height:1.6}
+.pathead b{color:#1a2433}
+.pathead span{display:block;color:#8a97a8;font-size:10.5px}
+.pattable{width:100%;border-collapse:collapse;font-size:11.5px;min-width:760px}
+.pattable th{background:#eef4fa;text-align:left;padding:5px 8px;font-size:10.5px;color:var(--ink2);border-bottom:1px solid #dbe6f2;white-space:nowrap}
+.pattable td{padding:5px 8px;border-bottom:1px solid #eef2f7;white-space:nowrap}
+.pattable td.pcodes{white-space:normal;max-width:260px;color:#5b6675;font-size:10.5px}
+.pattable em{color:#c2410c;font-style:normal;font-weight:600}
+.patnote{margin-top:7px;font-size:11px;color:var(--ink2)}
+.patbtn.pb{background:#f3f0fb;border-color:#ddd6f0;color:#5b3fa8}
+.patbtn.pb:hover{background:#eae4f8}
+.pbwrap{border-left-color:#a78bd8}
+.pattable td.pbk{color:var(--ink2);white-space:nowrap;width:190px}
+/* 专利悬崖表 */
+.cltable{min-width:1180px}
+.cltable td{white-space:nowrap}
+.cltable .clna{color:#c2cbd8}
+.cltable .clman{color:#8a97a8;font-size:11.5px}
+.cltable .clsrc{color:var(--ink2);font-size:11.5px}
+.cltable th:first-child,.cltable td:first-child{position:sticky;left:0;background:#fff}
+.cltable thead th:first-child{background:#f1f5f9}
+.cl-narrow{max-width:150px}
+.cltable th.sortable{cursor:pointer;user-select:none;white-space:nowrap}
+.cltable th.sortable:hover{background:#e6eef8;color:var(--brand2)}
+.cltable th.sortable.on{color:var(--brand2)}
+.cltable .sarrow{font-style:normal;font-size:9px;margin-left:4px;color:#b6c2d2}
+.cltable .sarrow.on{color:var(--brand2);font-size:10px}
+/* 药物列收窄：允许换行、限制宽度 */
+.cltable th:nth-child(2),.cltable td:nth-child(2){max-width:190px;white-space:normal}
+.cltable td:nth-child(2){font-size:12px;line-height:1.35}
+.cltable td.s3{min-width:118px}
+.cltable .sy.usd .v{color:#0e7c86;font-weight:600;font-size:11px}
+.unitlegend{background:#f4f8fd;border:1px solid #e2ecf7;border-radius:8px;padding:3px 9px;color:#41546b}
+.cltable .molbr{display:block;font-size:10.5px;color:#8a97a8;font-weight:400;margin-top:1px}
+.patbtn.flat{background:#eef2f7;border-color:#dbe3ee;color:#5b6675;cursor:default}
+/* 收窄：靶点 / 中国 / 关键市场（auto 布局下 max-width 对 td 常被忽略，用内联块约束） */
+.cltable .clw{display:inline-block;white-space:normal;vertical-align:top}
+.cltable .narrow-tg{max-width:116px;line-height:1.5}
+.cltable .narrow-sm{max-width:58px;line-height:1.4}
+.cltable .narrow-mkt{max-width:164px;font-size:11px;line-height:1.35}
+.cltable th:nth-child(3){width:120px}
+.cltable th:nth-child(9){width:62px}
+.cltable th:nth-child(11){width:62px}
+.cltable th:nth-child(13){width:170px}
 .loe-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:1px}
 .loe-dot-hot{background:#d92d20}.loe-dot-mid{background:#f79009}.loe-dot-cool{background:#12b76a}
 .loe-hot{color:#b42318;font-weight:600}.loe-mid{color:#b54708;font-weight:600}.loe-cool{color:#067647}
@@ -538,6 +588,7 @@ select.uictl,.filterbar select,.netbar select{
         </div>
         <div class="navmenu">
           <button data-view="companies">公司目录</button>
+          <button data-view="cliff">专利悬崖</button>
           <button data-view="org">组织架构</button>
           <button data-view="flow">BD 决策流</button>
         </div>
@@ -624,32 +675,32 @@ select.uictl,.filterbar select,.netbar select{
     </div>
     <div class="netbar">
       <span class="seg" id="netMode">
-        <button type="button" data-mode="org" class="on">共同公司</button>
-        <button type="button" data-mode="school">共同学校</button>
+        <button type="button" data-mode="org" class="on" data-zh="共同公司" data-en="Shared employers">共同公司</button>
+        <button type="button" data-mode="school" data-zh="共同学校" data-en="Shared schools">共同学校</button>
       </span>
-      <select id="netCompany"><option value="">全部公司</option></select>
+      <select id="netCompany"><option value="" data-zh="全部公司" data-en="All companies">全部公司</option></select>
       <select id="netGroup">
-        <option value="">全部类别</option>
-        <option value="global_bd">全球 BD</option>
-        <option value="global_rnd">全球研发 / TA</option>
-        <option value="china_mgmt">中国管理团队</option>
-        <option value="china_bd">中国 BD</option>
-        <option value="china_rnd">中国研发</option>
-        <option value="venture">投资 / 孵化</option>
+        <option value="" data-zh="全部类别" data-en="All groups">全部类别</option>
+        <option value="global_bd" data-zh="全球 BD" data-en="Global BD">全球 BD</option>
+        <option value="global_rnd" data-zh="全球研发 / TA" data-en="Global R&D / TA">全球研发 / TA</option>
+        <option value="china_mgmt" data-zh="中国管理团队" data-en="China management">中国管理团队</option>
+        <option value="china_bd" data-zh="中国 BD" data-en="China BD">中国 BD</option>
+        <option value="china_rnd" data-zh="中国研发" data-en="China R&D">中国研发</option>
+        <option value="venture" data-zh="投资 / 孵化" data-en="Venture / incubation">投资 / 孵化</option>
       </select>
-      <label><input type="checkbox" id="netIncludeCurrent"> 含当前公司</label>
-      <label id="netTopWrap" style="display:none"><input type="checkbox" id="netTopOnly"> 只看最高学历</label>
-      <label>最少共同 <input type="number" id="netMinWeight" min="1" max="5" value="1"> 项</label>
-      <label>布局
+      <label><input type="checkbox" id="netIncludeCurrent"> <span data-zh="含当前公司" data-en="Include current employer">含当前公司</span></label>
+      <label id="netTopWrap" style="display:none"><input type="checkbox" id="netTopOnly"> <span data-zh="只看最高学历" data-en="Highest degree only">只看最高学历</span></label>
+      <label><span data-zh="最少共同" data-en="Min. shared">最少共同</span> <input type="number" id="netMinWeight" min="1" max="5" value="1"> <span data-zh="项" data-en="items">项</span></label>
+      <label><span data-zh="布局" data-en="Layout">布局</span>
         <select id="netLayout">
-          <option value="force">力导向</option>
-          <option value="cluster">分组分簇</option>
-          <option value="radial" selected>径向同心圆</option>
+          <option value="force" data-zh="力导向" data-en="Force-directed">力导向</option>
+          <option value="cluster" data-zh="分组分簇" data-en="Clustered">分组分簇</option>
+          <option value="radial" selected data-zh="径向同心圆" data-en="Radial concentric">径向同心圆</option>
         </select>
       </label>
-      <label id="netClusterWrap" style="display:none">按
-        <select id="netClusterBy"><option value="group">类别</option><option value="company">公司</option></select>
-        分簇
+      <label id="netClusterWrap" style="display:none"><span data-zh="按" data-en="Cluster by">按</span>
+        <select id="netClusterBy"><option value="group" data-zh="类别" data-en="Group">类别</option><option value="company" data-zh="公司" data-en="Company">公司</option></select>
+        <span data-zh="分簇" data-en="">分簇</span>
       </label>
       <span class="netsearch">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -750,20 +801,46 @@ select.uictl,.filterbar select,.netbar select{
     </div>
     <div class="netbar" id="tgBar">
       <div class="seg" id="tgMode">
-        <button data-tgm="matrix" class="on">公司 × 靶点</button>
-        <button data-tgm="trend">靶点热度趋势</button>
+        <button data-tgm="matrix" class="on" data-zh="公司 × 靶点" data-en="Company × Target">公司 × 靶点</button>
+        <button data-tgm="trend" data-zh="靶点热度趋势" data-en="Target deal trend">靶点热度趋势</button>
       </div>
-      <label>类别 <select id="tgClass" class="uictl"></select></label>
-      <label>最少 <input type="number" id="tgMin" class="uictl" value="2" min="1" max="20" style="width:72px"> 家</label>
-      <label><input type="checkbox" id="tgDealOnly"> 只看有 BD 的靶点</label>
-      <label><input type="checkbox" id="tgHideNA" checked> 隐藏「不适用」</label>
+      <label><span data-zh="类别" data-en="Class">类别</span> <select id="tgClass" class="uictl"></select></label>
+      <label><span data-zh="最少" data-en="Min.">最少</span> <input type="number" id="tgMin" class="uictl" value="2" min="1" max="20" style="width:72px"> <span data-zh="家" data-en="companies">家</span></label>
+      <label><input type="checkbox" id="tgDealOnly"> <span data-zh="只看有 BD 的靶点" data-en="Targets with BD deals only">只看有 BD 的靶点</span></label>
+      <label><input type="checkbox" id="tgHideNA" checked> <span data-zh="隐藏「不适用」" data-en="Hide N/A targets">隐藏「不适用」</span></label>
       <span class="netsearch">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg>
-        <input id="tgSearch" class="uictl" placeholder="搜索靶点">
+        <input id="tgSearch" class="uictl" placeholder="搜索靶点" data-zh-ph="搜索靶点" data-en-ph="Search target">
       </span>
       <span class="netstat" id="tgStat"></span>
     </div>
     <div id="tgMain"></div>
+  </section>
+
+  <!-- ============ 智能推荐 ============ -->
+  <section id="view-cliff" class="view">
+    <div class="page-head">
+      <h1>专利悬崖</h1>
+      <p>20 家 MNC 全部上市药 + 专利/独占到期：美国到期日取自 FDA 橙皮书（小分子）/ Purple Book（生物制品），按专利号可追到 Google Patents；其他市场为人工整理的关键市场口径 · 支持公司、靶点、治疗领域筛选与销售额、到期日排序</p>
+      <div class="stat-chips" id="clChips"></div>
+    </div>
+    <div class="netbar" id="clBar">
+      <label><span class="cllbl" data-zh="公司" data-en="Company">公司</span> <select id="clCompany" class="uictl"></select></label>
+      <label><span class="cllbl" data-zh="治疗领域" data-en="TA">治疗领域</span> <select id="clTA" class="uictl"></select></label>
+      <label><span class="cllbl" data-zh="靶点" data-en="Target">靶点</span> <select id="clTarget" class="uictl cl-narrow"></select></label>
+      <label><span class="cllbl" data-zh="数据" data-en="Data">数据</span> <select id="clSource" class="uictl">
+        <option value="">全部</option><option value="patent">有美国专利</option><option value="excl">有美国到期/独占</option><option value="none">无专利/独占</option>
+      </select></label>
+      <label><span class="cllbl" data-zh="到期年" data-en="Expiry year">到期年</span> <select id="clYear" class="uictl"></select></label>
+      <label><input type="checkbox" id="clMerge"> <span class="cllbl" data-zh="同公司按分子合并" data-en="Merge by molecule (same company)">同公司按分子合并</span></label>
+      <label><input type="checkbox" id="clHideNoSales"> <span class="cllbl" data-zh="只看有销售额数据的药" data-en="Only drugs with sales data">只看有销售额数据的药</span></label>
+      <span class="netsearch">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg>
+        <input id="clSearch" class="uictl" placeholder="搜索药物 / 通用名 / 靶点">
+      </span>
+      <span class="netstat" id="clStat"></span>
+    </div>
+    <div id="clMain"></div>
   </section>
 
   <!-- ============ 智能推荐 ============ -->
@@ -890,6 +967,7 @@ select.uictl,.filterbar select,.netbar select{
 
 <script src="data.js"></script>
 <script src="target_matrix.js"></script>
+<script src="patents.js"></script>
 <script src="vendor/d3.min.js"></script>
 <script src="network.js"></script>
 <script>
@@ -999,6 +1077,9 @@ const TA_EN = {
   '肿瘤/免疫':'Oncology / Immunology','呼吸/免疫':'Respiratory / Immunology','神经/医美':'Neuroscience / Aesthetics',
   '眼科/罕见病':'Ophthalmology / Rare Disease','罕见病/心脏':'Rare Disease / Cardiology','罕见病/肾':'Rare Disease / Renal',
   '罕见病/血液':'Rare Disease / Hematology','骨健康/肿瘤':'Bone health / Oncology'
+  ,'血液制品':'Blood products','生殖/激素':'Reproductive / Hormonal','围手术期/营养':'Perioperative / Nutrition',
+  '骨骼/肾脏':'Bone / Renal','泌尿':'Urology','罕见病/酶替代':'Rare Disease / Enzyme replacement','神经/精神':'Neuroscience / Psychiatry'
+  ,'麻醉/镇痛':'Anesthesia / Analgesia'
 };
 function taLabel(ta){
   if(!ta) return '—';
@@ -1032,13 +1113,19 @@ function applyStaticLang(){
   document.title = T('MNC BD 情报库 · 全球 Top 20 跨国药企 BD & 研发负责人','MNC BD Intelligence Hub · BD & R&D Leaders at Top 20 Pharma');
   if($('#siteTitle')) $('#siteTitle').textContent = T('MNC BD 情报库','MNC BD Intelligence Hub');
   if($('#siteTagline')) $('#siteTagline').textContent = T('Top 20 跨国药企 · BD/研发/投资线/孵化平台','Top 20 pharma · BD / R&D / venture arms / incubators');
-  const navTxt = {companies:['公司目录','Companies'], people:['人物库','People'], 'people-network':['人物网络图','People Network'], org:['组织架构','Org Charts'], flow:['BD 决策流','BD Process'], invest:['投资线 × 孵化平台','Venture Arms × Incubators'], deals:['并购 × 管线合作交易库','M&A × Pipeline Deal Library'], targets:['靶点格局','Target Landscape'], recommend:['BD 智能推荐','AI BD Match']};
+  const navTxt = {companies:['公司目录','Companies'], cliff:['专利悬崖','Patent Cliff'], people:['人物库','People'], 'people-network':['人物网络图','People Network'], org:['组织架构','Org Charts'], flow:['BD 决策流','BD Process'], invest:['投资线 × 孵化平台','Venture Arms × Incubators'], deals:['并购 × 管线合作交易库','M&A × Pipeline Deal Library'], targets:['靶点格局','Target Landscape'], recommend:['BD 智能推荐','AI BD Match']};
   $$('nav.tabs button[data-view]').forEach(b=>{ const t=navTxt[b.dataset.view]; if(t) b.textContent = T(t[0],t[1]); });
   const navGroups = {companies:['公司','Companies'], people:['人物','People'], deals:['交易与投资','Deals & Ventures']};
   $$('nav.tabs .navgroup').forEach(g=>{ const t=navGroups[g.dataset.group]; const b=g.querySelector('.navtoggle'); if(t&&b) b.textContent = T(t[0],t[1]); });
   const navLink = $('#navRecommend'); if(navLink) navLink.textContent = T('BD 智能推荐','AI BD Match');
   const navActions = {photo:['上传照片识人','Identify from photo']};
   $$('nav.tabs .navmenu button[data-action]').forEach(b=>{ const t=navActions[b.dataset.action]; if(t) b.textContent = T(t[0],t[1]); });
+  /* 通用：带 data-zh / data-en 的元素按语言切换文本（只标叶子节点，别标含表单的 label） */
+  $$('[data-zh][data-en]').forEach(el=>{ el.textContent = LANG==='en' ? el.dataset.en : el.dataset.zh; });
+  /* 专利悬崖筛选栏 */
+  const clSearchEl = $('#clSearch'); if(clSearchEl) clSearchEl.placeholder = T('搜索药物 / 通用名 / 靶点','Search product / INN / target');
+  /* 通用 placeholder（搜索框等） */
+  $$('[data-zh-ph][data-en-ph]').forEach(el=>{ el.placeholder = LANG==='en' ? el.dataset.enPh : el.dataset.zhPh; });
   $('#globalSearch').placeholder = T('搜索人名 / 公司 / 职位…','Search people / companies / titles…');
   const netSearchEl = $('#netSearch'); if(netSearchEl) netSearchEl.placeholder = T('搜索人物，回车聚焦','Search a name, press Enter');
   const heads = {
@@ -1050,6 +1137,7 @@ function applyStaticLang(){
     invest:['投资线 × 在华孵化平台','Venture Arms × China Incubators','MNC 公司创投基金 / 战略股权投资 · 在华孵化器与开放创新平台 —— 早期项目的另一扇对接之门','Corporate venture funds / strategic equity · China incubators & open innovation platforms — another door for early-stage assets'],
     deals:['并购 × 管线合作交易库','M&A × Pipeline Deal Library','2020 年以来 Top 20 MNC 重点交易：交易结构（首付款 / 里程碑 / 权益）· 标的资产靶点、Modality、MoA 与关键临床数据 · 可按 Modality 筛选 · 信息来自公司公告与公开报道','Key deals since 2020: structures (upfront / milestones / rights) · asset targets, modality, MoA & pivotal data · filter by modality · From company announcements and public reports'],
     targets:['靶点格局','Target Landscape','把 20 家 MNC 的上市药、自研管线与 BD 交易按靶点归到一起：谁在做、做到哪一期、是自研还是引进 · 可看单个靶点的公司分布与年份热度','All 20 MNCs\' marketed drugs, own pipelines and BD deals mapped by target: who works on it, at what stage, in-house or partnered · per-target company spread and yearly deal heat'],
+    cliff:['专利悬崖','Patent Cliff','20 家 MNC 全部上市药 + 专利/独占到期：美国到期日取自 FDA 橙皮书（小分子）/ Purple Book（生物制品），按专利号可追到 Google Patents；其他市场为人工整理的关键市场口径 · 支持公司、靶点、治疗领域筛选与销售额、到期日排序','All marketed drugs of the 20 MNCs with patent / exclusivity expiry: US dates from the FDA Orange Book (small molecules) / Purple Book (biologics), traceable to Google Patents; other markets are manually curated · filter by company / target / TA, sort by sales or expiry'],
     recommend:['BD 智能推荐','AI-Powered BD Match','输入贵司管线 / 技术平台描述，AI 将匹配最合适的 MNC 联系人并给出 BD 策略建议','Describe your pipeline / platform; AI matches the most relevant MNC contacts with BD strategy advice'],
   };
   Object.entries(heads).forEach(([v,[zh1,en1,zh2,en2]])=>{
@@ -1146,6 +1234,9 @@ function rerenderAll(){
   const vs=$('#vcCompany'); delete vs.dataset.filled; renderInvest();
   refreshDealFilters(); renderDeals();
   renderTargets();
+  // 专利悬崖：表头/单元格/筛选文案都跟语言绑定，停在该视图时重绘
+  const clv = $('#view-cliff');
+  if(typeof renderCliff === 'function' && clv && clv.classList.contains('active')) renderCliff();
   if(__currentCid && $('#view-company-detail').classList.contains('active')) renderCompanyDetail(__currentCid);
   // 网络图的节点标签 / 图例也跟语言绑定，当前正停在该视图时重绘一次
   const netView = $('#view-people-network');
@@ -1160,13 +1251,14 @@ function setLang(l){
 }
 $$('#langToggle button').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
 
-const VIEWS = ['companies','company-detail','people','people-network','org','flow','invest','deals','targets','recommend'];
+const VIEWS = ['companies','company-detail','cliff','people','people-network','org','flow','invest','deals','targets','recommend'];
 function showView(name, arg){
   VIEWS.forEach(v => $('#view-'+v).classList.toggle('active', v===name));
   $$('nav.tabs button[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view===name || (name==='company-detail'&&b.dataset.view==='companies')));
   $$('nav.tabs .navgroup').forEach(g => g.classList.toggle('active', !!g.querySelector('button.active')));
   if(name==='company-detail') renderCompanyDetail(arg);
   if(name==='people-network' && typeof netOnShow==='function') netOnShow();
+  if(name==='cliff' && typeof renderCliff==='function') renderCliff();
   const h = '#/' + (name==='company-detail' ? 'company/'+arg : name);
   if(location.hash !== h){ try{ location.hash = h; }catch(e){} }
   window.scrollTo({top:0, behavior:'smooth'});
@@ -1389,6 +1481,13 @@ function debounce(fn, ms){
 const peopleSearchDebounced = debounce(()=>{ renderPeople(); }, 140);
 $('#fKeyword').addEventListener('input',()=>{ $('#globalSearch').value=''; peopleSearchDebounced(); });
 $('#fReset').addEventListener('click',()=>{ ['fCompany','fGroup','fTA','fPhoto2','fKeyword'].forEach(id=>{ const el=$('#'+id); if(el) el.value=''; }); $('#globalSearch').value=''; renderPeople(); });
+/* 专利悬崖筛选绑定 */
+['clCompany','clTA','clTarget','clSource','clYear','clHideNoSales','clMerge'].forEach(id=>{
+  const el = $('#'+id);
+  if(el && !el.dataset.bound){ el.dataset.bound='1'; el.addEventListener('change', ()=>renderCliff()); }
+});
+(()=>{ const el = $('#clSearch'); if(!el || el.dataset.bound) return; el.dataset.bound='1';
+  let t = null; el.addEventListener('input', ()=>{ clearTimeout(t); t = setTimeout(()=>renderCliff(), 180); }); })();
 const __fpSel = $('#fPhoto2'); if(__fpSel) __fpSel.addEventListener('change', ()=>renderPeople());
 $('#globalSearch').addEventListener('input',()=>{
   $('#fKeyword').value='';
@@ -2290,6 +2389,67 @@ function loeUrgency(loe){
   if(/2028|2029/.test(loe)) return 'mid';
   return 'cool';
 }
+/* ── 上市药专利族（patents.js：FDA 橙皮书 + openFDA + Google Patents）────────── */
+function patDataFor(name){ return (window.PATENTS && window.PATENTS.drugs && window.PATENTS.drugs[name]) || null; }
+function patChip(name){
+  const pf = patDataFor(name);
+  if(!pf) return '';
+  if((pf.patents||[]).length) return `<button type="button" class="patbtn" onclick="togglePatents(this)">${T('专利族','Patents')} ${pf.patents.length}</button>`;
+  const pb = pf.pb; if(!pb) return '';
+  const d = pb.exclIso || pb.refExclIso || pb.orphanExclIso || '';
+  if(!d) return '';
+  return `<button type="button" class="patbtn pb" onclick="togglePatents(this)">${T('独占至','Excl. to')} ${esc(d.slice(0,7))}</button>`;
+}
+function pbBlock(pf){
+  const pb = pf.pb; if(!pb) return '';
+  const rows = [
+    [T('商品名 / 通用名','Brand / proper name'), `${pb.prop||''} / ${pb.proper||''}`],
+    [T('BLA 号','BLA'), pb.bla||''],
+    [T('许可类型','License type'), pb.licenseType||''],
+    [T('批准 / 首次许可','Approval / first licensure'), `${pb.approval||'—'} / ${pb.approvalIso||'—'}`],
+    [T('独占期到期','Exclusivity exp.'), pb.exclIso||pb.excl||'—'],
+    [T('首个可互换独占','First interchangeable excl.'), pb.interExclIso||'—'],
+    [T('参照产品独占','Ref. product excl.'), pb.refExclIso||'—'],
+    [T('孤儿药独占','Orphan excl.'), pb.orphanExclIso||'—'],
+    [T('是否提供专利清单','Patent list provided'), pb.patentList||'—'],
+  ].filter(r=>String(r[1]||'').trim() && String(r[1]).trim()!=='/' && String(r[1]).trim()!=='— / —');
+  return `<div class="pathead">${T('Purple Book 生物制品独占（橙皮书不登记生物制品专利）','Purple Book biologic exclusivity (Orange Book lists no biologic patents)')}
+    <span>${T('来源：FDA Purple Book 检索库，逐月更新','Source: FDA Purple Book search, monthly updates')}</span></div>
+    <table class="pattable"><tbody>${rows.map(r=>`<tr><td class="pbk">${esc(r[0])}</td><td>${esc(String(r[1]))}</td></tr>`).join('')}</tbody></table>`;
+}
+function patentFamilyRows(name){
+  const pf = patDataFor(name);
+  if(!pf) return '';
+  const hasPb = !!pf.pb;
+  if(!(pf.patents||[]).length){
+    if(!hasPb) return '';
+    return `<tr class="patdetail" style="display:none"><td colspan="8"><div class="patwrap pbwrap">${pbBlock(pf)}</div></td></tr>`;
+  }
+  const rows = pf.patents.map(pt=>`<tr>
+      <td><a href="${esc(pt.url)}" target="_blank" rel="noopener">${esc(pt.no)}</a></td>
+      <td>${esc(pt.type||'—')}</td>
+      <td>${esc(pt.filed||'—')}</td>
+      <td>${esc(pt.priority||'—')}</td>
+      <td>${esc(pt.expiry||'—')}${pt.ped_expiry?` <em>(${esc(pt.ped_expiry)} PED)</em>`:''}</td>
+      <td>${esc(pt.status||'—')}</td>
+      <td>${[pt.ds&&'DS',pt.dp&&'DP'].filter(Boolean).join(' / ')||'—'}</td>
+      <td class="pcodes">${esc(pt.use_codes||'—')}</td></tr>`).join('');
+  const ex = (pf.exclusivity||[]).length
+    ? `<div class="patnote">${T('独占期','Exclusivity')}：${pf.exclusivity.map(e=>esc(e.code+' → '+e.expiry)).join(' · ')}</div>` : '';
+  return `<tr class="patdetail" style="display:none"><td colspan="8">
+    <div class="patwrap">
+      <div class="pathead">${T('美国橙皮书登记专利族','US Orange Book patent family')} · <b>${esc(pf.generic||'')}</b> · ${esc(pf.appl||'')}
+        <span>${T('到期日取橙皮书口径，*PED 为儿科独占延长；申请日为 Google Patents 数据（可能缺失）','expiry per Orange Book, *PED = pediatric extension; filing dates from Google Patents (may be missing)')}</span></div>
+      <table class="pattable"><thead><tr>
+        <th>${T('专利号','Patent')}</th><th>${T('类型','Type')}</th><th>${T('申请日','Filed')}</th><th>${T('优先权日','Priority')}</th><th>${T('到期日','Expiry')}</th><th>${T('状态','Status')}</th><th>DS/DP</th><th>${T('用途码','Use codes')}</th>
+      </tr></thead><tbody>${rows}</tbody></table>${ex}
+      ${hasPb?pbBlock(pf):''}
+    </div></td></tr>`;
+}
+function togglePatents(btn){
+  const tr = btn.closest('tr'); const d = tr && tr.nextElementSibling;
+  if(d && d.classList.contains('patdetail')) d.style.display = (d.style.display==='none'||!d.style.display) ? 'table-row' : 'none';
+}
 /* 销售额单元格：三年（25/24/23）× 全球/美国/中国，金额单位「亿」原币 */
 function salesNum(v){ return (typeof v==='string' && /^[\d,.]+$/.test(v)) ? parseFloat(v.replace(/,/g,'')) : null; }
 function valText(v, cur){
@@ -2341,7 +2501,7 @@ function productPipelineSectionHTML(cid){
     html += `<div class="section-title">${T('💊 上市药物与专利悬崖（2023–2025 三年销售）','💊 Marketed Products & Patent Cliff (FY2023–FY2025)')}</div>
     ${crLine}
     <div class="pwrap"><table class="ptable">
-      <thead><tr><th>${T('药物','Product')}</th><th>${T('靶点','Target')}</th><th>${T('治疗领域','TA')}</th><th>${T('全球销售（近三年）','Global sales (3 yrs)')}</th><th>${T('美国','US')}</th><th>${T('中国','China')}</th><th>${T('专利到期（关键市场）','LOE (key markets)')}</th><th>${T('备注','Notes')}${LANG==='en'?' (中文原文)':''}</th></tr></thead>
+      <thead><tr><th>${T('药物','Product')}</th><th>${T('靶点','Target')}</th><th>${T('治疗领域','TA')}</th><th>${T('全球销售（亿，近三年）','Global sales (100M, 3 yrs)')}</th><th>${T('美国（亿）','US (100M)')}</th><th>${T('中国（亿）','China (100M)')}</th><th>${T('专利到期（关键市场）','LOE (key markets)')}</th><th>${T('备注','Notes')}${LANG==='en'?' (中文原文)':''}</th></tr></thead>
       <tbody>${prods.map(p=>{
         const u = loeUrgency(p.loe);
         return `<tr>
@@ -2351,9 +2511,9 @@ function productPipelineSectionHTML(cid){
           <td class="scell">${salesCell(p,'g')}</td>
           <td class="scell">${salesCell(p,'u')}</td>
           <td class="scell">${salesCell(p,'c')}</td>
-          <td>${p.loe?(u?`<span class="loe-${u}"><i class="loe-dot loe-dot-${u}"></i>${zhOnly(esc(p.loe))}</span>`:zhOnly(esc(p.loe))):'—'}</td>
+          <td>${p.loe?(u?`<span class="loe-${u}"><i class="loe-dot loe-dot-${u}"></i>${zhOnly(esc(p.loe))}</span>`:zhOnly(esc(p.loe))):'—'}${patChip(p.name)}</td>
           <td style="color:var(--ink2)">${zhOnly(esc(p.note_zh||''))}</td>
-        </tr>`;}).join('')}
+        </tr>${patentFamilyRows(p.name)}`;}).join('')}
       </tbody></table>
       <div class="plegend" style="margin-top:8px">
         <span><i class="loe-dot loe-dot-hot" style="width:9px;height:9px"></i>${T('悬崖临近（≤2027 或已到期）','Imminent cliff (≤2027 or expired)')}</span>
@@ -3148,6 +3308,316 @@ const TG_TRY_YEARS = () => {
   (DATA.deals||[]).forEach(d=>{ const y=(d.date||'').slice(0,4); if(y) ys.add(y); });
   return [...ys].sort();
 };
+/* ═══════════════════ 专利悬崖 ═══════════════════ */
+/* 各 MNC 按本币披露销售额，跨公司比较必须折美元。系数取 2025 年均值近似值。 */
+const FX_TO_USD = { '$':1, '€':1.08, '£':1.27, 'CHF':1.13, '¥':0.0067, 'DKK':0.145, 'CNY':0.14 };
+const FX_NOTE = 'FX≈2025 均值：$/€ 1.08 · £ 1.27 · CHF 1.13 · ¥ 0.0067 · DKK 0.145';
+/* 排序状态：点击表头切换；表格直接排序，不再用下拉框 */
+let CLIFF_SORT = { key:'exp', dir:1 };
+function cliffSetSort(key){
+  if(CLIFF_SORT.key === key) CLIFF_SORT.dir = -CLIFF_SORT.dir;
+  else CLIFF_SORT = { key, dir: (key==='sales'||key==='npat') ? -1 : 1 };
+  renderCliff();
+}
+function cliffArrow(key){
+  if(CLIFF_SORT.key !== key) return '<i class="sarrow">↕</i>';
+  return CLIFF_SORT.dir > 0 ? '<i class="sarrow on">▲</i>' : '<i class="sarrow on">▼</i>';
+}
+function cliffSortVal(r, key){
+  switch(key){
+    case 'sales': return r.salesUsd;                 // 美元口径数值
+    case 'npat': return r.npat;
+    case 'exp': return r.usYear === null || r.usYear === undefined ? '' : String(r.usYear);
+    case 'expfirst': { const y = yearOf(r.usFirst); return y === null ? '' : String(y); }
+    case 'excl': return r.excl || '';
+    case 'eu': return r.eu || '';
+    case 'jp': return r.jp || '';
+    case 'cn': return r.cn || '';
+    case 'manual': return r.loeText || '';
+    case 'src': return r.npat ? 2 : (r.pbf ? 1 : 0);
+    case 'ta': return r.ta || '';
+    case 'target': return r.targetStr || '';
+    case 'product': return r.name || '';
+    default: return r.cid || '';
+  }
+}
+function cliffCompare(a, b){
+  const k = CLIFF_SORT.key, d = CLIFF_SORT.dir;
+  const va = cliffSortVal(a, k), vb = cliffSortVal(b, k);
+  let c;
+  if(k === 'sales'){
+    const aNull = typeof va !== 'number', bNull = typeof vb !== 'number';
+    if(aNull && bNull) c = 0;
+    else if(aNull) return 1;        // 无销售额恒排最后（升序降序都一样）
+    else if(bNull) return -1;
+    else c = va - vb;
+  } else if(k === 'npat' || k === 'src'){
+    c = (va||0) - (vb||0);
+  } else {
+    const sa = String(va||''), sb = String(vb||'');
+    // 空值永远排在后面
+    if(!sa && sb) return 1;
+    if(sa && !sb) return -1;
+    c = sa.localeCompare(sb, 'zh');
+  }
+  if(c === 0) c = String(a.name).localeCompare(String(b.name), 'zh');
+  return c * d;
+}
+/* 把人工整理的「关键市场」文本拆成美国/欧盟/日本/中国四栏；拆不出来的保留原文 */
+/* 从产品名里抽活性成分（分子）：括号里的第一个词，去掉 口服/长效/速效 等前缀与「，降糖」这类后缀 */
+function moleculeOf(name){
+  const m = /（([^）]*)）/.exec(name);
+  let s = m ? m[1] : String(name).split('（')[0];
+  s = s.split(/[，,、]/)[0].trim().replace(/^(口服|长效|速效|超长效|注射用)/, '').trim();
+  return s || String(name).split('（')[0];
+}
+/* 同公司内按分子合并（跨公司联盟产品各按自家确认收入，不能合并，否则重复计算） */
+function cliffMergeRows(rows){
+  const map = new Map();
+  rows.forEach(r=>{
+    const mol = moleculeOf(r.name);
+    const key = r.cid + '|' + mol;
+    if(!map.has(key)) map.set(key, { cid:r.cid, mol, members:[] });
+    map.get(key).members.push(r);
+  });
+  const out = [];
+  map.forEach(g=>{
+    if(g.members.length < 2){ out.push(g.members[0]); return; }
+    const cur = (g.members[0].p && g.members[0].p.cur) || '$';
+    const sales = {};
+    ['2023','2024','2025'].forEach(y=>{
+      let sum = null;
+      g.members.forEach(r=>{
+        const v = r.p.sales && r.p.sales[y] && r.p.sales[y].g;
+        const n = parseFloat(String(v===undefined?'':v).replace(/,/g,''));
+        if(!isNaN(n)) sum = (sum||0) + n;
+      });
+      if(sum !== null) sales[y] = { g: String(+sum.toFixed(1)) };
+    });
+    const dates = g.members.map(r=>r.usDate).filter(Boolean).sort();
+    const firstAll = g.members.map(r=>r.usFirst).filter(Boolean).sort();
+    const yrs = g.members.map(r=>r.usYear).filter(v=>v!==null && v!==undefined);
+    const salesUsdSum = g.members.reduce((s,r)=>s+(typeof r.salesUsd==='number'?r.salesUsd:0), 0);
+    out.push({
+      cid:g.cid, name:g.mol, members:g.members, merged:true,
+      p:{ sales, cur, company_id:g.cid, name:g.mol },
+      generic:g.members.map(r=>r.generic).filter(Boolean)[0]||'',
+      ta:g.members.find(r=>r.ta)?.ta || '',
+      targets:[...new Set(g.members.flatMap(r=>r.targets))],
+      targetStr:[...new Set(g.members.flatMap(r=>r.targets))].join(' / '),
+      sales:null,
+      salesUsd: salesUsdSum ? +salesUsdSum.toFixed(2) : null,
+      hasSales: salesUsdSum > 0,
+      usDate: dates[dates.length-1] || '', usFirst: firstAll[0] || '',
+      usYear: yrs.length ? Math.max(...yrs) : null,
+      hasExpiry: g.members.some(r=>r.hasExpiry),
+      excl: g.members.map(r=>r.excl).filter(Boolean).sort().pop() || '',
+      eu:g.members.map(r=>r.eu).filter(Boolean)[0]||'',
+      jp:g.members.map(r=>r.jp).filter(Boolean)[0]||'',
+      cn:g.members.map(r=>r.cn).filter(Boolean)[0]||'',
+      npat: g.members.reduce((s,r)=>s+r.npat,0),
+      pbf: g.members.some(r=>r.pbf),
+      appl: g.members.map(r=>r.appl).filter(Boolean)[0]||'',
+      loeText: [...new Set(g.members.map(r=>r.loeText).filter(Boolean))].join(' / '),
+      usManual: g.members.map(r=>r.usManual).filter(Boolean).sort()[0]||'',
+    });
+  });
+  return out;
+}
+function loeByMarket(loe){
+  const out = { us:'', eu:'', jp:'', cn:'' };
+  String(loe||'').split(/[·;；,，]/).forEach(seg => {
+    const s = seg.trim(); if(!s) return;
+    const v = s.replace(/^(US|美国|美|欧盟|欧洲|EU|日本|JP|中国|CN)\s*[:：]?\s*/i,'').trim() || s;
+    if(/欧盟|欧洲|\bEU\b/i.test(s)) out.eu = out.eu || v;
+    else if(/日本|\bJP\b/i.test(s)) out.jp = out.jp || v;
+    else if(/中国|\bCN\b/i.test(s)) out.cn = out.cn || v;
+    else if(/(^|[^A-Za-z])(US|USA)([^A-Za-z]|$)|美国|^美/.test(s)) out.us = out.us || v;
+  });
+  return out;
+}
+/* 美国到期日的取值优先级：橙皮书/PB 到期日 > 人工整理的美国文本；年份从字符串里抽第一处 4 位年 */
+function cliffUsDate(p, pf){
+  const mkt = loeByMarket(p.loe);
+  const pb = pf && pf.pb;
+  return (pf && pf.loe_last) || (pb && (pb.exclIso || pb.refExclIso)) || mkt.us || '';
+}
+function yearOf(s){
+  const m = String(s || '').match(/(?:19|20)\d{2}/);
+  return m ? Number(m[0]) : null;
+}
+function cliffSales2025(p){
+  const v = p.sales && p.sales['2025'] && p.sales['2025'].g;
+  if(v===undefined || v===null || v==='') return null;
+  const n = parseFloat(String(v).replace(/,/g,''));
+  return isNaN(n) ? null : n;
+}
+/* 三年中只要有任一年是数值，就算「有销售额数据」（后补的 FDA 条目三格全空） */
+function cliffHasAnySales(p){
+  const S = p.sales || {};
+  return ['2025','2024','2023'].some(y=>{
+    const v = (S[y]||{}).g;
+    if(v===undefined || v===null || v==='') return false;
+    return !isNaN(parseFloat(String(v).replace(/,/g,'')));
+  });
+}
+let CLIFF_FILLED_KEY = null;
+function fillCliffFilters(){
+  const co = $('#clCompany'), ta = $('#clTA'), tg = $('#clTarget'), yr = $('#clYear');
+  if(!co) return;
+  // 语言变了要重建（选项文案跟语言绑定）；重建时保留已选值
+  const key = LANG + '|' + tgAll().length;
+  if(CLIFF_FILLED_KEY === key) return;
+  CLIFF_FILLED_KEY = key;
+  const keep = { co:co.value, ta:ta.value, tg:tg.value, yr:yr.value };
+  const cids = [...new Set((DATA.products||[]).map(p=>p.company_id))];
+  co.innerHTML = `<option value="">${T('全部公司','All companies')}</option>` + cids.map(c=>`<option value="${c}">${esc(coName(companyById(c)))}</option>`).join('');
+  const tas = [...new Set((DATA.products||[]).map(p=>p.ta).filter(Boolean))].sort();
+  ta.innerHTML = `<option value="">${T('全部领域','All TAs')}</option>` + tas.map(x=>`<option value="${esc(x)}">${esc(taLabel(x))}</option>`).join('');
+  // 靶点按覆盖公司数排序，最常被关注的排前面（800+ 靶点时体验更好）
+  const tgs = tgAll().filter(t=>!/^不适用/.test(t.key))
+    .sort((a,b)=>Object.keys(b.companies).length-Object.keys(a.companies).length || String(a.key).localeCompare(String(b.key)));
+  tg.innerHTML = `<option value="">${T('全部靶点','All targets')}</option>`
+    + tgs.map(t=>`<option value="${esc(t.key)}">${esc(t.key)}（${Object.keys(t.companies).length}）</option>`).join('');
+  const years = new Set();
+  (DATA.products||[]).forEach(p=>{
+    const y = yearOf(cliffUsDate(p, patDataFor(p.name)));   // 与「到期年」过滤同一取值口径
+    if(y) years.add(y);
+  });
+  yr.innerHTML = `<option value="">${T('全部','All')}</option>` + [...years].sort().map(y=>`<option value="${y}">≤ ${y}</option>`).join('');
+  if(keep.co) co.value = keep.co;
+  if(keep.ta) ta.value = keep.ta;
+  if(keep.tg) tg.value = keep.tg;
+  if(keep.yr) yr.value = keep.yr;
+}
+function renderCliff(){
+  const main = $('#clMain'); if(!main) return;
+  fillCliffFilters();
+  // 下拉选项文案随语言重建（保留已选值）
+  [['#clSource', [['','全部','All'],['patent','有美国专利','With US patents'],['excl','有美国到期/独占','With US expiry or exclusivity'],['none','无专利/独占','No patent/exclusivity']]]].forEach(([sel, opts])=>{
+    const el = $(sel); if(!el) return;
+    const cur = el.value;
+    el.innerHTML = opts.map(([v, zh, en])=>`<option value="${v}">${T(zh,en)}</option>`).join('');
+    if(cur) el.value = cur;
+  });
+  const co = ($('#clCompany')||{}).value || '';
+  const ta = ($('#clTA')||{}).value || '';
+  const tg = ($('#clTarget')||{}).value || '';
+  const srcSel = ($('#clSource')||{}).value || '';
+  const yrSel = ($('#clYear')||{}).value || '';
+  const kw = (($('#clSearch')||{}).value || '').trim().toLowerCase();
+  const hideNoSales = $('#clHideNoSales') ? $('#clHideNoSales').checked : true;
+  const mergeMol = $('#clMerge') ? $('#clMerge').checked : false;
+
+  const rows = (DATA.products||[]).map(p=>{
+    const pf = patDataFor(p.name) || null;
+    const pats = (pf && pf.patents) || [];
+    const pb = (pf && pf.pb) || null;
+    const mkt = loeByMarket(p.loe);
+    // 结构化日期（橙皮书/PB，ISO）与人工整理文本分开存：显示用前者，过滤/排序用抽出的年份
+    const usDate = (pf && pf.loe_last) || (pb && (pb.exclIso || pb.refExclIso)) || '';
+    const usManual = mkt.us || '';
+    const usYear = yearOf(usDate) || yearOf(usManual);
+    const usFirst = (pf && pf.loe_first) || '';
+    const excl = pb ? (pb.exclIso || pb.refExclIso || pb.orphanExclIso || '') : '';
+    const targets = tgTargetsForName(p.name).filter(t=>!/^不适用/.test(t));
+    return {
+      p, cid:p.company_id, name:p.name, generic:(pf&&pf.generic)||'',
+      ta:p.ta||'', targets, targetStr: targets.join(' / '),
+      sales: cliffSales2025(p), hasSales: cliffHasAnySales(p),
+      salesUsd: (()=>{ const v = cliffSales2025(p); return v===null ? null : +(v * (FX_TO_USD[p.cur||'$'] || 1)).toFixed(2); })(),
+      usDate, usManual, usYear, hasExpiry: !!(usDate || usManual),
+      usFirst, excl, eu: mkt.eu, jp: mkt.jp, cn: mkt.cn,
+      npat: pats.length, ob: !!(pf&&pf.ob), pbf: !!pb,
+      loeText: p.loe||'', appl: (pf&&pf.appl)||p.appl||'',
+    };
+  });
+
+  let list = rows.filter(r=>{
+    if(co && r.cid!==co) return false;
+    if(ta && r.ta!==ta) return false;
+    if(tg && !r.targets.includes(tg)) return false;
+    if(srcSel==='patent' && !r.npat) return false;
+    if(srcSel==='excl' && !r.hasExpiry) return false;
+    if(srcSel==='none' && (r.npat || r.hasExpiry)) return false;
+    if(hideNoSales && !r.hasSales) return false;
+    if(kw && !((r.name+' '+r.generic+' '+r.targetStr).toLowerCase().includes(kw))) return false;
+    if(yrSel){
+      // 取不到年份的一律排除（此前 NaN 会把「化合物 2028.12（部分专利至 2029）」这类文本放行）
+      if(r.usYear === null || r.usYear > Number(yrSel)) return false;
+    }
+    return true;
+  });
+
+  if(mergeMol) list = cliffMergeRows(list);
+  list.sort(cliffCompare);
+
+  const withPat = rows.filter(r=>r.npat).length, withExcl = rows.filter(r=>r.hasExpiry).length;
+  const soon = rows.filter(r=>r.usYear!==null && r.usYear>=2026 && r.usYear<=2030).length;
+  const chips = $('#clChips');
+  if(chips) chips.innerHTML = `<span class="chip"><b>${rows.length}</b> ${T('上市药总数','products')}</span>
+    <span class="chip"><b>${withPat}</b> ${T('有美国登记专利','with US patents')}</span>
+    <span class="chip"><b>${withExcl}</b> ${T('有到期日/独占','with expiry')}</span>
+    <span class="chip hot"><b>${soon}</b> ${T('2026–2030 到期','expiring 2026–2030')}</span>`;
+
+  const stat = $('#clStat');
+  if(stat) stat.textContent = T('筛选出 '+list.length+' 款','showing '+list.length);
+
+  const cell = r=>{
+    const y = r.usYear;
+    const band = y === null ? '' : (y <= 2027 ? 'hot' : y <= 2029 ? 'mid' : 'cool');
+    const usTxt = r.usDate
+      ? `<span class="loe-${band}"><i class="loe-dot loe-dot-${band}"></i>${esc(r.usDate.slice(0,7))}</span>`
+      : (r.usManual ? `<span class="clman">${esc(r.usManual)}</span>` : '<span class="clna">—</span>');
+    return `<tr>
+      <td class="pname">${esc(coName(companyById(r.cid)))}</td>
+      <td class="pname">${r.merged
+        ? `${esc(r.name)}<span class="molbr">${esc(r.members.map(m=>String(nameEn(m.name)).replace(/（.*/,'')).join(' + '))}</span>`
+        : esc(nameEn(r.name))}${r.npat?(r.merged?` <span class="patbtn flat">${r.npat}</span>`:` <button type="button" class="patbtn" onclick="cliffShowPatents(this)" data-drug="${esc(r.name)}">${r.npat}</button>`):''}</td>
+      <td>${r.targetStr?`<span class="clw narrow-tg">${r.targets.map(t=>`<span class="tgtag">${esc(t)}</span>`).join(' ')}</span>`:'<span class="clna">—</span>'}</td>
+      <td>${r.ta?`<span class="tag">${esc(taLabel(r.ta))}</span>`:'<span class="clna">—</span>'}</td>
+      <td class="scell s3">${salesCell(r.p,'g')}${(r.salesUsd!==null && r.p.cur && r.p.cur!=='$')?`<div class="sy usd"><span class="v">${T('≈ $'+r.salesUsd+' 亿','≈ $'+r.salesUsd+' 100M')}</span></div>`:''}</td>
+      <td>${usTxt}</td>
+      <td>${r.usFirst?esc(r.usFirst):'<span class="clna">—</span>'}</td>
+      <td>${r.excl?esc(r.excl):'<span class="clna">—</span>'}</td>
+      <td>${r.eu?`<span class="clw narrow-sm">${esc(r.eu)}</span>`:'<span class="clna">—</span>'}</td>
+      <td>${r.jp?esc(r.jp):'<span class="clna">—</span>'}</td>
+      <td>${r.cn?`<span class="clw narrow-sm">${esc(r.cn)}</span>`:'<span class="clna">—</span>'}</td>
+      <td class="clsrc">${r.npat?T('橙皮书','Orange Book'):(r.pbf?T('Purple Book','Purple Book'):'<span class="clna">—</span>')}</td>
+      <td class="clsrc">${r.loeText?`<span class="clw narrow-mkt">${esc(r.loeText)}</span>`:'<span class="clna">—</span>'}</td>
+    </tr>`;
+  };
+
+  const th = (key, zh, en)=>`<th class="sortable${CLIFF_SORT.key===key?' on':''}" onclick="cliffSetSort('${key}')">${T(zh,en)}${cliffArrow(key)}</th>`;
+  main.innerHTML = `<div class="pwrap"><div class="pscroll"><table class="ptable cltable">
+    <thead><tr>
+      ${th('company','公司','Company')}${th('product','药物','Product')}${th('target','靶点','Target')}${th('ta','治疗领域','TA')}
+      ${th('sales','销售额（亿，2025/24/23）','Sales (100M, FY25/24/23)')}${th('exp','美国到期（最晚）','US expiry (latest)')}${th('expfirst','美国最早到期','US earliest')}
+      ${th('excl','美国独占','US exclusivity')}${th('eu','欧盟','EU')}${th('jp','日本','Japan')}${th('cn','中国','China')}
+      ${th('src','美国数据源','US source')}${th('manual','关键市场（人工整理）','Key markets (manual)')}
+    </tr></thead>
+    <tbody>${list.map(cell).join('')}</tbody></table></div>
+    <div class="plegend" style="margin-top:8px">
+      <span><i class="loe-dot loe-dot-hot" style="width:9px;height:9px"></i>${T('≤2027','≤2027')}</span>
+      <span><i class="loe-dot loe-dot-mid" style="width:9px;height:9px"></i>${T('2028–29','2028–29')}</span>
+      <span><i class="loe-dot loe-dot-cool" style="width:9px;height:9px"></i>${T('2030+','2030+')}</span>
+      <span class="unitlegend">${T('销售额单位：亿（各公司本币）· $ 美元 · € 欧元 · £ 英镑 · CHF 瑞郎 · ¥ 日元 · DKK 丹麦克朗 · 「≈ $xx 亿」为折算后的美元口径，仅用于排序','Sales unit: 100 million in each company\'s reporting currency · $ USD · € EUR · £ GBP · CHF · ¥ JPY · DKK · "≈ $xx 100M" is the USD equivalent used only for sorting')}</span>
+      <span class="unitlegend">${T('默认按「品牌」列（K 药、Mounjaro、Ozempic、Wegovy 各算一行，与各家年报口径一致）；勾选「同公司按分子合并」后，同一活性成分合并为一行（如司美格鲁肽 = Ozempic + Wegovy + Rybelsus）。跨公司联盟产品（如 Eliquis 的 BMS / 辉瑞）各按自家确认收入分列，不做跨公司加总，避免重复计算。','Rows are per branded product by default (as reported by each company). Tick "merge by molecule" to combine brands of the same active ingredient within one company (e.g. semaglutide = Ozempic + Wegovy + Rybelsus). Cross-company alliances (e.g. Eliquis at BMS / Pfizer) stay separate to avoid double counting.')}</span>
+      <span style="margin-left:auto">${T('点表头即可排序（销售额按美元口径数值比较）。美国到期=橙皮书 Patent Expiration（含 *PED 儿科延长）；生物制品取 Purple Book 独占期。欧盟/日本/中国为人工整理，未覆盖的显示「—」。点药物名后的数字可展开该药专利族。'+' '+FX_NOTE,'Click a column header to sort (sales compared in USD). US expiry from Orange Book (incl. *PED); biologics use Purple Book exclusivity. EU/JP/CN are manually curated where available. Click the number next to a product to expand its patent family. '+FX_NOTE)}</span>
+    </div></div>`;
+}
+function cliffShowPatents(btn){
+  const drug = btn.dataset.drug;
+  const pf = patDataFor(drug); if(!pf) return;
+  const wrap = btn.closest('tr');
+  const next = wrap.nextElementSibling;
+  if(next && next.classList.contains('patdetail')){ next.remove(); return; }
+  const tmp = document.createElement('tbody');
+  tmp.innerHTML = patentFamilyRows(drug);
+  const row = tmp.firstElementChild;
+  if(row){ row.style.display='table-row'; wrap.after(row); }
+}
+
 function tgAll(){ return (window.TARGET_MATRIX && window.TARGET_MATRIX.targets) || []; }
 function tgStageCls(stage){
   const R = (window.TARGET_MATRIX||{}).stages || {};
@@ -3155,7 +3625,12 @@ function tgStageCls(stage){
 }
 function tgStageShort(stage){
   const S = (window.TARGET_MATRIX||{}).stageShort || {};
-  return S[stage] || stage;
+  const base = S[stage] || stage;
+  if(LANG !== 'en') return base;
+  const EN = { '已上市':'Mkt','上市':'Mkt','申报':'Filed','III期':'Ph3','II期':'Ph2','I期':'Ph1',
+    'I/II期':'Ph1/2','临床前':'PC','发现':'Disc','交易':'BD','已终止':'Term','已撤市':'Wdr' };
+  const BYSHORT = { '上市':'Mkt','申报':'Filed','III':'Ph3','II':'Ph2','I':'Ph1' };
+  return EN[stage] || BYSHORT[base] || base;
 }
 function tgFiltered(){
   const q = TG.q.trim().toLowerCase();
@@ -3170,6 +3645,29 @@ function tgFiltered(){
   });
 }
 function tgClassOf(t){ return t.cls && t.cls !== '其他' ? t.cls : (t.cls || '其他'); }
+/* 靶点类别英文名（矩阵分组标题与类别下拉共用；类别是数据里的中文分类键，不能改键） */
+const TG_CLASS_EN = {
+  '肿瘤-IO':'Oncology · IO','肿瘤-靶向':'Oncology · targeted','肿瘤-ADC/偶联':'Oncology · ADC/conjugate',
+  '细胞与基因治疗':'Cell & gene therapy','血液':'Hematology','免疫-Th 轴':'Immunology · Th axis',
+  '免疫-2型炎症':'Immunology · type 2','免疫-B/T 细胞':'Immunology · B/T cell','免疫-耐受与调节':'Immunology · tolerance',
+  '免疫-肠道与屏障':'Immunology · gut/barrier','免疫-固有免疫':'Immunology · innate','补体':'Complement',
+  '神经':'Neuroscience','心血管/代谢':'Cardio / metabolic','呼吸':'Respiratory','感染/疫苗':'Infectious / vaccines',
+  '眼科':'Ophthalmology','罕见病/酶替代':'Rare disease / enzyme','其他':'Other',
+};
+function tgClassLabel(k){ return LANG==='en' ? (TG_CLASS_EN[k] || k) : k; }
+let TG_CLS_LANG = null;
+function fillTgClassSelect(){
+  const sel = $('#tgClass'); if(!sel) return;
+  if(TG_CLS_LANG === LANG) return;
+  TG_CLS_LANG = LANG;
+  const keep = sel.value;
+  const order = (window.TARGET_MATRIX||{}).classOrder || [];
+  const used = [...new Set(tgAll().map(tgClassOf))];
+  sel.innerHTML = `<option value="">${T('全部类别','All classes')}</option>` +
+    order.filter(k=>used.includes(k)).concat(used.filter(k=>!order.includes(k)))
+      .map(k=>`<option value="${esc(k)}">${esc(tgClassLabel(k))}</option>`).join('');
+  if(keep) sel.value = keep;
+}
 function tgCellHTML(cid, cell){
   if(!cell) return `<td class="tgcell"></td>`;
   const KN = { product:'上市药', own:'自研管线', ext:'引进/并购/合作管线', deal:'BD 交易' };
@@ -3187,7 +3685,7 @@ function tgMatrixHTML(list){
     `<th title="${esc(c.name)}">${c.logo?`<img src="${esc(c.logo)}" alt="">`:''}${esc(LANG==='en'?c.name:c.name_zh)}</th>`).join('')}</tr></thead>`;
   const body = keys.map(k=>{
     const rows = groups[k].sort((a,b)=>Object.keys(b.companies).length-Object.keys(a.companies).length || a.key.localeCompare(b.key));
-    return `<tr class="tggroup"><th colspan="${cos.length+1}">${esc(k)} · ${rows.length}</th></tr>` +
+    return `<tr class="tggroup"><th colspan="${cos.length+1}">${esc(tgClassLabel(k))} · ${rows.length}</th></tr>` +
       rows.map(t=>{
         const sel = TG.sel === t.key ? ' sel' : '';
         return `<tr class="tgrow${sel}" data-tk="${esc(t.key)}"><th>${esc(t.key)} <span style="color:#9aa7b8;font-weight:400">${Object.keys(t.companies).length}</span></th>` +
@@ -3240,6 +3738,7 @@ function tgDetailHTML(t){
     <div class="tgco">${cards}</div></div>`;
 }
 function renderTargets(){
+  fillTgClassSelect();   // 语言切换时重建类别下拉（选项文案跟语言绑定）
   const mount = $('#tgMain'); if(!mount) return;
   const list = tgFiltered();
   const all = tgAll();
@@ -3308,13 +3807,8 @@ function initTargets(){
     renderTargets();
   }));
   const sel = $('#tgClass');
-  if(sel){
-    const order = (window.TARGET_MATRIX||{}).classOrder || [];
-    const used = [...new Set(tgAll().map(tgClassOf))];
-    sel.innerHTML = `<option value="">${T('全部类别','All classes')}</option>` +
-      order.filter(k=>used.includes(k)).concat(used.filter(k=>!order.includes(k))).map(k=>`<option value="${esc(k)}">${esc(k)}</option>`).join('');
-    sel.addEventListener('change', ()=>{ TG.cls = sel.value; renderTargets(); });
-  }
+  if(sel && !sel.dataset.bound){ sel.dataset.bound = '1'; sel.addEventListener('change', ()=>{ TG.cls = sel.value; renderTargets(); }); }
+  fillTgClassSelect();
   const minEl = $('#tgMin');
   if(minEl) minEl.addEventListener('change', ()=>{ TG.min = Math.max(1, Math.min(20, parseInt(minEl.value,10)||1)); minEl.value = TG.min; renderTargets(); });
   const dealEl = $('#tgDealOnly');
