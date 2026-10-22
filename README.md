@@ -1,10 +1,10 @@
 # MNC BD 情报库
 
-全球 Top 20 跨国药企（MNC）的 **BD / 研发 / 投资负责人情报库** —— 纯静态站点，无需后端、无需数据库。
+全球 Top 20 跨国药企（MNC）的 **BD / 研发 / 投资负责人情报库 + 上市药专利悬崖库** —— 纯静态站点，无需后端、无需数据库。
 
 **在线访问**：https://yangliu9revir.github.io/MNC_BD/
 
-另有一个单文件离线版 `MNC_BD.html`（Logo 已内联），可直接下载给同事双击使用。
+另有一个单文件离线版 `MNC_BD.html`（Logo、数据、矩阵、专利全部内联），可直接下载给同事双击使用。
 
 ---
 
@@ -16,16 +16,34 @@
 | 人物库 | **384 位**负责人档案，六个分类：全球 BD（97）· 全球研发 TA（117）· 中国管理（51）· 中国 BD（47）· 中国研发（44）· 投资/孵化（28） |
 | 人物详情 | 公开履历（338 人有结构化工作经历）、教育背景、汇报线、头像、来源链接、在职状态 |
 | 人物关系网络图 | 共同公司 / 共同学校两种连边；力导向、分组分簇、径向同心圆三种布局；关联面板与 PNG / SVG 导出 |
-| 产品与管线 | 270 款上市药物 · 333 条在研管线（含靶点、Modality、阶段、适应症） |
+| 产品与管线 | **900 款上市药物**（270 款重点药带三年销售额 + 630 款按 FDA 口径补齐的原研处方药）· 333 条在研管线（含靶点、Modality、阶段、适应症） |
+| **专利悬崖**（二级菜单，公司目录下） | 900 款上市药 × 美国专利/独占到期一张宽表：公司 / 药物（可展开专利族）/ 靶点 / 治疗领域 / **销售额（2025·24·23 三年 + 同比）** / **美国到期（最晚）· 美国最早到期 · 美国独占** / 欧盟 · 日本 · 中国 / 数据源 / 关键市场（人工整理）。筛选：公司、治疗领域、靶点、数据完整度、到期年、只看有销售额的药、关键词；**点表头排序**（13 列，销售额按美元口径比大小）；另有「同公司按分子合并」（司美格鲁肽 = Ozempic + Wegovy + Rybelsus） |
+| 靶点格局 | 把 20 家 MNC 的**上市药 + 自研管线 + BD 交易**按靶点归到一张热力矩阵：**830 个靶点、1285 个「公司 × 靶点」格子** · 格内为该公司在该靶点的最高阶段，小点标注来源（上市药 / 自研管线 / BD 交易）· 支持按机制类别、最少覆盖公司数、只看有 BD 筛选 · 点靶点展开逐公司明细 · 另有「靶点热度趋势」（靶点 × 年份的 BD 交易数）。公司详情页的药物表与管线表也带「靶点」列 |
 | 组织架构 / BD 决策流 | 各公司汇报关系图；MNC 对外合作（License-in / 收购 / 联合开发）的典型决策链 |
 | 投资线 × 孵化平台 | 20 家公司的创投布局（16 家有品牌化基金 · 2 家直投 · 2 家无独立创投线）· 8 个在华孵化 / 开放创新平台 |
-| 交易库 | **372 笔**并购 × 管线合作（2020 年至今）：并购 149 · 合作开发 118 · License-in 79 · 期权 18 · 股权投资 5 · License-out 3，含交易结构、首付/里程碑、靶点、关键临床数据 |
-| **靶点格局**（新） | 把 20 家 MNC 的**上市药 + 自研管线 + BD 交易**按靶点归到一张热力矩阵：633 个靶点、901 个「公司 × 靶点」格子 · 格内为该公司在该靶点的最高阶段，小点标注来源（上市药 / 自研管线 / BD 交易）· 支持按机制类别、最少覆盖公司数、只看有 BD 筛选 · 点靶点展开逐公司明细 · 另有「靶点热度趋势」（靶点 × 年份的 BD 交易数）。公司详情页的药物表与管线表也补上了「靶点」列 |
+| 交易库 | **386 笔**并购 × 管线合作（2020 年至今）：并购 153 · 合作开发 123 · License-in 83 · 期权协议 19 · 股权投资 5 · License-out 3，含交易结构、首付/里程碑、靶点、关键临床数据 |
 
 两个**本机计算**的智能工具（不上传任何数据）：
 
 - **BD 智能推荐**：本地 TF-IDF 语义检索，从 384 位负责人中召回最匹配的联系人并给出接触策略
 - **上传照片识人**：本机人脸向量比对（366 张头像建索引，361 人可用），支持离线使用
+
+---
+
+## 专利与独占数据从哪来
+
+「专利悬崖」与药物表的专利族全部来自**公开权威源**，不是估算：
+
+| 来源 | 取到什么 |
+| --- | --- |
+| FDA **橙皮书**（Orange Book） | 小分子的美国登记专利号、**专利到期日**、Drug Substance / Drug Product 标记、用途码 `U-xxxx`、儿科独占 `*PED` 延长后的到期日、独占期（NCE/NPP 等） |
+| FDA **Purple Book** | 生物制品（BLA，橙皮书不登记专利）的**独占期**：Exclusivity Expiration / First Interchangeable Excl. / Ref. Product Excl. / Orphan Exclusivity，外加 License Type 与「是否提供专利清单」 |
+| **Google Patents** | 每件专利的优先权日与申请日（1639/1647 条已补齐；到期日仍以橙皮书为准） |
+| openFDA Drugs@FDA / NDC | 商品名 → 申请号（NDA/BLA）、英文通用名、批准状态；并用全量 29,404 条申请记录反查各公司近年获批清单 |
+
+当前覆盖：**287 款药有橙皮书登记专利（1647 条）**，**233 款匹配到 Purple Book**（其中 106 款带独占期到期日，其余独占期已过、官方留空）。
+
+**口径提示**：生物制品没有「专利」只有「独占期」，Purple Book 按制度就不列专利；要生物制品的专利族需另查厂商披露。
 
 ---
 
@@ -46,9 +64,10 @@
 | `network.js` | 人物关系网络图模块 |
 | `vendor/d3.min.js` | d3 v7 |
 | `face_index.js` | 人脸特征索引（366 人 → 361 条向量），首次使用识人功能时才加载 |
-| `target_matrix.js` | 靶点格局矩阵（633 个靶点 × 20 家 MNC），由 `research/build_target_matrix.py` 生成 |
+| `target_matrix.js` | 靶点格局矩阵（830 个靶点 × 20 家 MNC），由 `research/build_target_matrix.py` 生成 |
+| `patents.js` | 上市药专利族与独占（橙皮书 + Purple Book + Google Patents），由 `research/build_patent_data.js` 生成 |
 | `models/` | face-api.js 与 3 个人脸模型（含离线模式用的 `face-assets.js`），约 17MB，按需加载 |
-| `photos/` | 366 张本地头像（已压缩，长边 512px） |
+| `photos/` | 366 张本地头像（已压缩，长边 512px），约 9.4MB |
 | `logos/` | 20 家公司品牌 Logo |
 | `MNC_BD.html` | 单文件离线版（可选，方便直接分发） |
 
@@ -70,8 +89,11 @@ python3 -m http.server 8000
 
 ## 数据说明
 
-- 全部信息整理自**公开渠道**：公司官网、官方新闻稿、行业媒体、公开 LinkedIn 资料
-- 数据截至 **2026-10-20**，并已完成联网复核
+- 全部信息整理自**公开渠道**：公司官网、官方新闻稿、行业媒体、FDA（橙皮书 / Purple Book / Drugs@FDA）、公开 LinkedIn 资料
+- 数据截至 **2026-10-22**，并已完成联网复核
+- **看销售额先看单位**：单位统一为「**亿**」，货币是**各公司本币**（辉瑞/默沙东/强生/艾伯维/AZ/诺华/BMS/礼来/安进/吉利德/CSL＝美元，罗氏＝瑞郎，赛诺菲/勃林格/拜耳＝欧元，GSK＝英镑，诺和诺德＝丹麦克朗，武田/安斯泰来/第一三共＝日元），跨公司比较请用表格里的「≈ $xx 亿」美元折算（汇率表 `FX_TO_USD`，2025 年均值近似）
+- **销售额是品牌级口径**，与各家年报一致：K 药（316 亿美元）是单品牌全球销售额，而司美格鲁肽拆成 Ozempic + Wegovy + Rybelsus（合计 $331 亿）、替尔泊肽拆成 Mounjaro + Zepbound（合计 $365 亿）—— **按分子算这两个都超过 K 药**，可用「同公司按分子合并」查看分子口径
+- **联盟产品是「本公司份额」不是全球总额**：Eliquis 在 BMS / 辉瑞各按自家确认收入分列，Lynparza、Enhertu 等同理，不可跨公司相加
 - 仅供商务拓展内部参考；高管任职可能随时变动，联系方式请以各公司官方 Partnering 渠道为准
 - **不收录任何非公开个人信息**；上传照片识人的比对全程在本机浏览器完成，照片不会被上传
 
@@ -84,15 +106,20 @@ python3 -m http.server 8000
 更新流程：
 
 1. 在主项目里修改数据或页面
-2. 若改动了 `index.html` / `data.js` / `network.js` / `target_matrix.js`，先跑 `node build_standalone.js` 重建单文件版
-   （补了上市药、管线或交易后，先跑 `python3 research/build_target_matrix.py` 重建靶点矩阵）
-3. 若更换了头像，需重建人脸索引（`node research/build_face_index.js`）
-4. 同步到本目录后提交推送：
+2. 若补了上市药 / 管线 / 交易，先重建派生数据：
+   ```bash
+   python3 research/build_target_matrix.py    # 靶点格局矩阵
+   node    research/build_patent_data.js      # 专利族与独占（需联网）
+   ```
+3. 再跑 `node build_standalone.js` 重建单文件版 `MNC_BD.html`
+4. 若更换了头像，需重建人脸索引（`node research/build_face_index.js`）
+5. 同步到本目录后提交推送：
 
 ```bash
 # 在主项目根目录执行
 cd /path/to/MNC_BD
-rsync -a --exclude='.DS_Store' index.html data.js network.js face_index.js target_matrix.js MNC_BD.html \
+rsync -a --exclude='.DS_Store' \
+      index.html data.js network.js face_index.js target_matrix.js patents.js MNC_BD.html \
       vendor logos photos models github_release/MNC_BD/
 cd github_release/MNC_BD && git add -A && git commit -m "内容更新" && git push
 ```
@@ -103,4 +130,4 @@ cd github_release/MNC_BD && git add -A && git commit -m "内容更新" && git pu
 
 - 站点代码：内部使用
 - d3 v7、face-api.js：MIT 许可（face-api.js 许可证见 `models/LICENSE-face-api-MIT.txt`）
-- 公司 Logo、人物头像、管线与交易信息：版权归原发布方所有，仅用于内部线索核对
+- 公司 Logo、人物头像、管线与交易信息、专利与独占数据：版权归原发布方（各公司 / FDA / Google Patents）所有，仅用于内部线索核对
