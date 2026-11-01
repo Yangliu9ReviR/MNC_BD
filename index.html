@@ -302,13 +302,16 @@ nav.tabs button.navlink{font-weight:500}
 .pbwrap{border-left-color:#a78bd8}
 .pattable td.pbk{color:var(--ink2);white-space:nowrap;width:190px}
 /* 专利悬崖表 */
-.cltable{min-width:1180px}
+.cltable{min-width:1224px}
 .cltable td{white-space:nowrap}
 .cltable .clna{color:#c2cbd8}
 .cltable .clman{color:#8a97a8;font-size:11.5px}
 .cltable .clsrc{color:var(--ink2);font-size:11.5px}
-.cltable th:first-child,.cltable td:first-child{position:sticky;left:0;background:#fff}
+.cltable th:first-child,.cltable td:first-child{position:sticky;left:0;z-index:1;width:44px;min-width:44px;max-width:44px;text-align:right;padding-left:10px;padding-right:8px;background:#fff}
 .cltable thead th:first-child{background:#f1f5f9}
+.cltable th:nth-child(2),.cltable td:nth-child(2){position:sticky;left:44px;z-index:1;background:#fff}
+.cltable thead th:nth-child(2){background:#f1f5f9}
+.cltable .clrowno{color:#8a97a8;font-size:11.5px;font-variant-numeric:tabular-nums}
 .cl-narrow{max-width:150px}
 .cltable th.sortable{cursor:pointer;user-select:none;white-space:nowrap}
 .cltable th.sortable:hover{background:#e6eef8;color:var(--brand2)}
@@ -316,8 +319,8 @@ nav.tabs button.navlink{font-weight:500}
 .cltable .sarrow{font-style:normal;font-size:9px;margin-left:4px;color:#b6c2d2}
 .cltable .sarrow.on{color:var(--brand2);font-size:10px}
 /* 药物列收窄：允许换行、限制宽度 */
-.cltable th:nth-child(2),.cltable td:nth-child(2){max-width:190px;white-space:normal}
-.cltable td:nth-child(2){font-size:12px;line-height:1.35}
+.cltable th:nth-child(3),.cltable td:nth-child(3){max-width:190px;white-space:normal}
+.cltable td:nth-child(3){font-size:12px;line-height:1.35}
 .cltable td.s3{min-width:118px}
 .cltable .sy.usd .v{color:#0e7c86;font-weight:600;font-size:11px}
 .unitlegend{background:#f4f8fd;border:1px solid #e2ecf7;border-radius:8px;padding:3px 9px;color:#41546b}
@@ -328,10 +331,10 @@ nav.tabs button.navlink{font-weight:500}
 .cltable .narrow-tg{max-width:116px;line-height:1.5}
 .cltable .narrow-sm{max-width:58px;line-height:1.4}
 .cltable .narrow-mkt{max-width:164px;font-size:11px;line-height:1.35}
-.cltable th:nth-child(3){width:120px}
-.cltable th:nth-child(9){width:62px}
-.cltable th:nth-child(11){width:62px}
-.cltable th:nth-child(13){width:170px}
+.cltable th:nth-child(4){width:120px}
+.cltable th:nth-child(10){width:62px}
+.cltable th:nth-child(12){width:62px}
+.cltable th:nth-child(14){width:170px}
 .loe-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:1px}
 .loe-dot-hot{background:#d92d20}.loe-dot-mid{background:#f79009}.loe-dot-cool{background:#12b76a}
 .loe-hot{color:#b42318;font-weight:600}.loe-mid{color:#b54708;font-weight:600}.loe-cool{color:#067647}
@@ -3563,13 +3566,14 @@ function renderCliff(){
   const stat = $('#clStat');
   if(stat) stat.textContent = T('筛选出 '+list.length+' 款','showing '+list.length);
 
-  const cell = r=>{
+  const cell = (r, idx)=>{
     const y = r.usYear;
     const band = y === null ? '' : (y <= 2027 ? 'hot' : y <= 2029 ? 'mid' : 'cool');
     const usTxt = r.usDate
       ? `<span class="loe-${band}"><i class="loe-dot loe-dot-${band}"></i>${esc(r.usDate.slice(0,7))}</span>`
       : (r.usManual ? `<span class="clman">${esc(r.usManual)}</span>` : '<span class="clna">—</span>');
     return `<tr>
+      <td class="clrowno">${idx+1}</td>
       <td class="pname">${esc(coName(companyById(r.cid)))}</td>
       <td class="pname">${r.merged
         ? `${esc(r.name)}<span class="molbr">${esc(r.members.map(m=>String(nameEn(m.name)).replace(/（.*/,'')).join(' + '))}</span>`
@@ -3591,12 +3595,12 @@ function renderCliff(){
   const th = (key, zh, en)=>`<th class="sortable${CLIFF_SORT.key===key?' on':''}" onclick="cliffSetSort('${key}')">${T(zh,en)}${cliffArrow(key)}</th>`;
   main.innerHTML = `<div class="pwrap"><div class="pscroll"><table class="ptable cltable">
     <thead><tr>
-      ${th('company','公司','Company')}${th('product','药物','Product')}${th('target','靶点','Target')}${th('ta','治疗领域','TA')}
+      <th class="clrowno">#</th>${th('company','公司','Company')}${th('product','药物','Product')}${th('target','靶点','Target')}${th('ta','治疗领域','TA')}
       ${th('sales','销售额（亿，2025/24/23）','Sales (100M, FY25/24/23)')}${th('exp','美国到期（最晚）','US expiry (latest)')}${th('expfirst','美国最早到期','US earliest')}
       ${th('excl','美国独占','US exclusivity')}${th('eu','欧盟','EU')}${th('jp','日本','Japan')}${th('cn','中国','China')}
       ${th('src','美国数据源','US source')}${th('manual','关键市场（人工整理）','Key markets (manual)')}
     </tr></thead>
-    <tbody>${list.map(cell).join('')}</tbody></table></div>
+    <tbody>${list.map((r,idx)=>cell(r,idx)).join('')}</tbody></table></div>
     <div class="plegend" style="margin-top:8px">
       <span><i class="loe-dot loe-dot-hot" style="width:9px;height:9px"></i>${T('≤2027','≤2027')}</span>
       <span><i class="loe-dot loe-dot-mid" style="width:9px;height:9px"></i>${T('2028–29','2028–29')}</span>
@@ -3615,7 +3619,11 @@ function cliffShowPatents(btn){
   const tmp = document.createElement('tbody');
   tmp.innerHTML = patentFamilyRows(drug);
   const row = tmp.firstElementChild;
-  if(row){ row.style.display='table-row'; wrap.after(row); }
+  if(row){
+    row.firstElementChild.colSpan = 14;
+    row.style.display='table-row';
+    wrap.after(row);
+  }
 }
 
 function tgAll(){ return (window.TARGET_MATRIX && window.TARGET_MATRIX.targets) || []; }
